@@ -1,0 +1,14 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN apt-get update && \
+    apt-get install -y build-essential python3-dev && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+COPY . .
+
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8000"]
