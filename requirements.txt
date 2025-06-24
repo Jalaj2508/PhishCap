@@ -4,7 +4,7 @@ wheel
 cython
 
 # Main dependencies
-beautifulsoup4==4.12.2
+beautifulsoup4==4.9.3
 Flask==3.0.3
 googlesearch_python==1.0.1
 numpy==1.23.5
