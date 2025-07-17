@@ -2,6 +2,7 @@
 setuptools==65.5.1
 wheel
 cython
+distutils
 
 # Main dependencies
 beautifulsoup4==4.9.3
