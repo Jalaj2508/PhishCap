@@ -1,15 +1,21 @@
 # PhishCap
+<img width="1000" height="1000" alt="PhishCap copy" src="https://github.com/user-attachments/assets/2d4f0e63-6139-4c3c-b5a0-e756b8d70f3a" />
+
 ## Table of Content
-  * [Introduction](#introduction)
+  * [Introduction and Motivation](#Introduction-and-Motivation)
   * [Installation](#installation)
   * [Directory Tree](#directory-tree)
   * [Result](#result)
   * [Conclusion](#conclusion)
 
 
-## Introduction
+## Introduction and Motivation
 
-The Internet has become an indispensable part of our life, However, It also has provided opportunities to anonymously perform malicious activities like Phishing. Phishers try to deceive their victims by social engineering or creating mockup websites to steal information such as account ID, username, password from individuals and organizations. Although many methods have been proposed to detect phishing websites, Phishers have evolved their methods to escape from these detection methods. One of the most successful methods for detecting these malicious activities is Machine Learning. This is because most Phishing attacks have some common characteristics which can be identified by machine learning methods. To see project click [here]("/").
+The life of a Modern Day Human being is next to impossible to be imagined without Internet.The expanse till which our life in automated digitally is deep and thus complex as well.And due to this, a lot of us tend to fall for cyber crimes and frauds, one of them is Phishing.According to phishing.org, Phishing is a cybercrime in which a target or targets are contacted by email, telephone or text message by someone posing as a legitimate institution to lure individuals into providing sensitive data such as personally identifiable information, banking and credit card details, and passwords.
+
+There are ways with which phishing attacks are found out, but attackers also evolve with time, but one of the robust ways to catch the attackers is through Machine Learning.Thus, as an apiring tech and Cyber Security enthusiast, I decide to develop a project which can detect whether a website is legitimate or not, via Machine Learning, which I fancily say to be "PhishCap".
+
+Before moving forwards, I have to give credit to Vaibhav Bichave(https://github.com/vaibhavbichave), to be the one who first worked on this project 3 years ago, as I was fortunate to who found out about his project and source code which acted as a backbone to mine as well, as I was able to recycle his original model with newer data and changes. I am always fortunate to have amazing developers who's contribution and work helps aspiring and learning techies like me!
 
 
 ## Installation
@@ -20,6 +26,16 @@ pip install -r requirements.txt
 
 ## Directory Tree 
 ```
+├── .ipynb_checkpoints
+│   ├── PhishCap-checkpoint.ipynb
+├── _pycache_
+│   ├── feature.cpython-38.pyc
+│   ├── feature.cpython-39.pyc
+├── catboost_info
+│   ├── learn
+│   |   ├── events.out.tfevents
+│   ├── learn_error.tsv
+│   ├── time_left.tsv
 ├── pickle
 │   ├── model.pkl
 ├── static
@@ -28,6 +44,7 @@ pip install -r requirements.txt
 │   ├── favicon.png
 ├── templates
 │   ├── index.html
+├── Dockerfile
 ├── PhishCap.ipynb
 ├── Procfile
 ├── README.md
@@ -35,7 +52,7 @@ pip install -r requirements.txt
 ├── feature.py
 ├── phishing.csv
 ├── requirements.txt
-
+├── runtime.txt
 
 ```
 
@@ -72,11 +89,3 @@ Feature importance for Phishing URL Detection
 <br><br>
 ![image](https://user-images.githubusercontent.com/79131292/144603941-19044aae-7d7b-4e9a-88a8-6adfd8626f77.png)
 
-
-
-
-## Conclusion
-1. The final take away form this project is to explore various machine learning models, perform Exploratory Data Analysis on phishing dataset and understanding their features. 
-2. Creating this notebook helped me to learn a lot about the features affecting the models to detect whether URL is safe or not, also I came to know how to tuned model and how they affect the model performance.
-3. The final conclusion on the Phishing dataset is that the some feature like "HTTTPS", "AnchorURL", "WebsiteTraffic" have more importance to classify URL is phishing URL or not. 
-4. Gradient Boosting Classifier currectly classify URL upto 97.4% respective classes and hence reduces the chance of malicious attachments.
