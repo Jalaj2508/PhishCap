@@ -1,5 +1,5 @@
 # PhishCap
-<img width="1000" height="1000" alt="PhishCap copy" src="https://github.com/user-attachments/assets/2d4f0e63-6139-4c3c-b5a0-e756b8d70f3a" />
+<img width="500" height="500" alt="PhishCap copy" src="https://github.com/user-attachments/assets/2d4f0e63-6139-4c3c-b5a0-e756b8d70f3a" />
 
 ## Table of Content
   * [Introduction and Motivation](#Introduction-and-Motivation)
