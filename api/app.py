@@ -20,7 +20,8 @@ gbc = pickle.load(file)
 file.close()
 
 
-app = Flask(__name__)
+template_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates'))
+app = Flask(__name__, template_folder=template_dir)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -31,7 +32,7 @@ def index():
         #Whitelist Websites
         whitelist = ['google.com', 'microsoft.com', 'github.com']
         if any(kw in url for kw in whitelist):
-            return render_template('../templates/index.html', xx=1.0, url=url)
+            return render_template('index.html', xx=1.0, url=url)
 
         #ML-based prediction
         obj = FeatureExtraction(url)
@@ -44,8 +45,8 @@ def index():
         y_pro_non_phishing = gbc.predict_proba(x)[0,1]
         # if(y_pred ==1 ):
         pred = "It is {0:.2f} % safe to go ".format(y_pro_non_phishing * 100)
-        return render_template('../templates/index.html', xx=round(y_pro_non_phishing,2), url=url)
-    return render_template("../templates/index.html", xx=-1)
+        return render_template('index.html', xx=round(y_pro_non_phishing,2), url=url)
+    return render_template("index.html", xx=-1)
 
 
 if __name__ == "__main__":
