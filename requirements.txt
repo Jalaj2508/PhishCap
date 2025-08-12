@@ -1,17 +1,17 @@
-# Build tools (essential for numpy, pandas, etc.)
-setuptools==65.5.1
+# Build tools
+setuptools>=65.5.1
 wheel
 cython
 distutils
 
-# Main dependencies
-beautifulsoup4==4.9.3
-Flask==3.0.3
-googlesearch_python==1.0.1
-numpy==1.23.5
-pandas==1.3.5
-python-dateutil==2.8.2
-requests==2.25.1
-scikit-learn==1.0.1
-whois==0.9.13
-gunicorn==20.1.0
+# Application dependencies
+beautifulsoup4>=4.9.3
+Flask>=3.0.3,<3.2     # Flask supports Python 3.9 and above :contentReference[oaicite:0]{index=0}
+googlesearch_python>=1.0.1
+numpy>=1.25.0,<2.0    # Maintains compatibility with pandas :contentReference[oaicite:1]{index=1}
+pandas>=2.0.3,<3.0    # Compatible with numpy ≥ 1.25 and Python 3.9 :contentReference[oaicite:2]{index=2}
+python-dateutil>=2.8.2
+requests>=2.25.1
+scikit-learn>=1.0.1
+whois>=0.9.13
+gunicorn>=20.1.0
