@@ -35,3 +35,6 @@ To install the required packages, run the following command in the project direc
 
 ```bash
 pip install -r requirements.txt
+
+---
+
