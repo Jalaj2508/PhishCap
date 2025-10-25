@@ -1,6 +1,3 @@
-#importing required libraries
-
-
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -14,17 +11,18 @@ import pickle
 warnings.filterwarnings('ignore')
 from feature import FeatureExtraction
 
-model_path = os.path.join(os.path.dirname(__file__), '..', 'pickle', 'model.pkl')
+model_path = os.path.join(os.path.dirname(__file__), 'pickle', 'model.pkl')
 file = open(model_path, "rb")
 gbc = pickle.load(file)
 file.close()
 
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-template_dir = os.path.join(base_dir, 'templates')
-static_dir = os.path.join(base_dir, 'static')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
-app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
