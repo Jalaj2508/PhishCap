@@ -10,6 +10,8 @@ from datetime import date, datetime
 import time
 from dateutil.parser import parse as date_parse
 from urllib.parse import urlparse
+import ssl
+from datetime import timezone
 
 class FeatureExtraction:
     features = []
@@ -137,15 +139,89 @@ class FeatureExtraction:
             return 0
         return -1
 
+    def _get_cert(self, host, timeout=3):
+        """Return the peer certificate dict or None on failure."""
+        try:
+            context = ssl.create_default_context()
+            # do not verify hostname here; we only want the cert dict
+            with socket.create_connection((host, 443), timeout=timeout) as sock:
+                with context.wrap_socket(sock, server_hostname=host) as ssock:
+                    cert = ssock.getpeercert()
+            return cert
+        except Exception:
+            return None
+
     # 8.HTTPS
     def Hppts(self):
+        """
+        Replace simple 'https present' binary with certificate-based check:
+         - returns 1 if HTTPS and cert present, not expired, domain appears in cert and cert validity >= 30 days
+         - returns 0 if HTTPS present but cert missing / expired / suspicious
+         - returns -1 if no HTTPS
+        Keeps the same single feature slot so downstream code doesn't need schema changes.
+        """
         try:
-            https = self.urlparse.scheme
-            if 'https' in https:
+            parsed = getattr(self, "urlparse", None)
+            scheme = parsed.scheme.lower() if parsed and getattr(parsed, "scheme", None) else ""
+            if scheme != "https":
+                return -1  # no TLS
+
+            host = parsed.netloc.split(':')[0] if parsed and getattr(parsed, "netloc", None) else None
+            if not host:
+                return 0
+
+            cert = self._get_cert(host)
+            if not cert:
+                return 0  # HTTPS present but couldn't fetch cert -> suspicious
+
+            # parse notBefore / notAfter using ssl.cert_time_to_seconds when available
+            try:
+                nb_ts = ssl.cert_time_to_seconds(cert.get("notBefore"))
+                na_ts = ssl.cert_time_to_seconds(cert.get("notAfter"))
+                not_before = datetime.fromtimestamp(nb_ts, tz=timezone.utc)
+                not_after = datetime.fromtimestamp(na_ts, tz=timezone.utc)
+            except Exception:
+                # fallback parsing (common format: 'Jun  1 12:00:00 2023 GMT')
+                try:
+                    fmt = "%b %d %H:%M:%S %Y %Z"
+                    not_before = datetime.strptime(cert.get("notBefore", ""), fmt).replace(tzinfo=timezone.utc)
+                    not_after = datetime.strptime(cert.get("notAfter", ""), fmt).replace(tzinfo=timezone.utc)
+                except Exception:
+                    return 0
+
+            now = datetime.now(tz=timezone.utc)
+            if now < not_before or now > not_after:
+                return 0  # expired or not yet valid
+
+            valid_days = (not_after - not_before).days if (not_after and not_before) else 0
+
+            # collect names from subjectAltName and subject CN
+            san = cert.get("subjectAltName", []) or []
+            san_names = [v.lower() for (k, v) in san if k.lower() == "dns"]
+            subject = cert.get("subject", []) or []
+            cn_names = []
+            for part in subject:
+                for k, v in part:
+                    if k.lower() == "commonname":
+                        cn_names.append(v.lower())
+
+            cert_names = set(san_names + cn_names)
+
+            domain = host.lower().lstrip("www.")
+            domain_in_cert = False
+            for name in cert_names:
+                n = name.lstrip("*.")  # handle wildcard
+                if domain == n or domain.endswith("." + n) or n.endswith("." + domain):
+                    domain_in_cert = True
+                    break
+
+            # Heuristic: require domain match AND some reasonable validity period
+            if domain_in_cert and valid_days >= 30:
                 return 1
-            return -1
-        except:
-            return 1
+            else:
+                return 0
+        except Exception:
+            return 0
 
     # 9.DomainRegLen
     def DomainRegLen(self):
