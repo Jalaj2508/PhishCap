@@ -31,7 +31,10 @@ def index():
         url = request.form["url"]
 
         #Whitelist Websites
-        whitelist = ['google.com', 'microsoft.com', 'github.com']
+        whitelist = ['google.com', 'microsoft.com', 'github.com', 'stackoverflow.com',
+                     'apple.com', 'amazon.com', 'facebook.com', 'twitter.com',
+                     'linkedin.com', 'wikipedia.org', 'instagram.com', 'youtube.com','https://phishcap-1.onrender.com/',
+                     'phishcap-1.onrender.com']
         if any(kw in url for kw in whitelist):
             return render_template('index.html', xx=1.0, url=url)
 
